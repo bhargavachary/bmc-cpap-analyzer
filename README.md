@@ -11,6 +11,8 @@ A comprehensive Python tool for independent analysis of BMC RESmart CPAP raw SD 
 - 📈 **Advanced Analytics** - Temporal trends, therapy effectiveness, compliance analysis
 - 🎯 **Flexible Timeframes** - Analyze recent data (3, 6, 12 months) or complete dataset
 - 💊 **Clinical Decision Support** - Evidence-based recommendations for therapy optimization
+- ⭐ **NEW: Detailed Event Analysis** - Night-by-night sleep event extraction with timing and intensity
+- 📊 **NEW: Granular Event Charts** - Individual event timelines, pressure responses, and patterns
 
 ## Quick Start
 
@@ -30,17 +32,29 @@ Copy BMC CPAP data files from SD card to a directory:
 
 ### 3. Run Analysis
 
+**Basic Sleep Study Analysis:**
 ```bash
 python bmc_sleep_analyzer.py
 ```
 
-**That's it!** No configuration needed - the analyzer works independently with raw SD card data using validated parsing algorithms.
+**Detailed Event Analysis (NEW):**
+```bash
+python detailed_event_analyzer.py
+```
+
+**That's it!** No configuration needed - the analyzers work independently with raw SD card data using validated parsing algorithms.
 
 ## Output Files
 
+**Sleep Study Analysis:**
 - **`bmc_sleep_study_report.txt`** - Comprehensive clinical sleep study report
 - **`bmc_sleep_study_analysis.png`** - Advanced visualization dashboard
 - **`bmc_sleep_study_analysis.json`** - Detailed analysis data
+
+**Detailed Event Analysis (NEW):**
+- **`detailed_sleep_events.png`** - Night-by-night event charts and timelines
+- **`detailed_sleep_events_report.txt`** - Granular event analysis with timing
+- **`detailed_sleep_events_data.json`** - Raw event data with pressure responses
 
 ## Sample Output
 
@@ -69,6 +83,29 @@ This analysis provides independent assessment of CPAP therapy
 effectiveness equivalent to comprehensive sleep study evaluation.
 ```
 
+**Detailed Event Analysis Output:**
+```
+🔍 BMC DETAILED EVENT ANALYZER
+==================================================
+📁 Timeframe: Last 3 months
+📁 Files found: 5
+
+🔍 Analyzing 23804346.025...
+  ✅ Found 174 events, 10,001 pressure readings
+🔍 Analyzing 23804346.026...
+  ✅ Found 221 events, 10,001 pressure readings
+
+📊 QUICK SUMMARY:
+• Nights analyzed: 5
+• Total events detected: 870
+• Average events per night: 174.0
+
+Night-by-night breakdown:
+• Night 1: 174 events (Moderate activity)
+• Night 2: 221 events (Highest activity)
+• Night 3: 129 events (Better night)
+```
+
 ## Why Raw Data Analysis is Superior
 
 ### ✅ Validated Accuracy
@@ -84,6 +121,8 @@ Our parsing algorithms have been **cross-validated against mobile app data** wit
 - **Temporal Analysis**: Detailed night-by-night and long-term trends
 - **Advanced Metrics**: Pressure stability, titration quality, therapeutic windows
 - **Independent Verification**: No reliance on manufacturer algorithms
+- **⭐ Granular Event Detection**: Individual sleep events with timing and intensity
+- **📊 Pressure Response Analysis**: CPAP responses to each detected event
 
 ## Understanding the Results
 
@@ -110,17 +149,18 @@ Our parsing algorithms have been **cross-validated against mobile app data** wit
 
 ```python
 from bmc_sleep_analyzer import BMCSleepAnalyzer
+from detailed_event_analyzer import DetailedEventAnalyzer
 
+# Basic comprehensive analysis
 analyzer = BMCSleepAnalyzer()
+analyzer.run_complete_analysis(months=3)  # Last 3 months
+analyzer.run_complete_analysis(months=6)  # Last 6 months
+analyzer.run_complete_analysis(months=None)  # Complete dataset
 
-# Analyze last 3 months
-analyzer.run_complete_analysis(months=3)
-
-# Analyze last 6 months
-analyzer.run_complete_analysis(months=6)
-
-# Analyze complete dataset
-analyzer.run_complete_analysis(months=None)
+# NEW: Detailed event analysis
+event_analyzer = DetailedEventAnalyzer()
+events_data, pressure_data = event_analyzer.extract_detailed_events()
+event_analyzer.create_detailed_event_charts(events_data, pressure_data)
 ```
 
 ### What the Analysis Includes
@@ -145,6 +185,14 @@ analyzer.run_complete_analysis(months=None)
 - Long-term therapy trends
 - Pressure optimization progress
 - Stability over time
+
+**⭐ NEW: Detailed Event Analysis:**
+- Night-by-night sleep event extraction
+- Individual event timing and intensity
+- Pressure response to each event
+- Event type classification and patterns
+- Hourly distribution analysis
+- Timeline reconstruction with file position mapping
 
 ## Supported Devices
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
 Example usage of BMC Sleep Study Analyzer
-Shows how to perform comprehensive sleep study analysis
+Shows how to perform comprehensive sleep study analysis and detailed event extraction
 """
 
 from bmc_sleep_analyzer import BMCSleepAnalyzer
+from detailed_event_analyzer import DetailedEventAnalyzer
 
 def example_basic_usage():
     """Basic usage example - comprehensive analysis"""
@@ -94,6 +95,84 @@ def example_custom_timeframe():
         else:
             print("⚠️ Variable pressure - may need titration review")
 
+def example_detailed_event_analysis():
+    """NEW: Example of detailed event analysis"""
+    print("\n=== DETAILED EVENT ANALYSIS (NEW) ===")
+
+    event_analyzer = DetailedEventAnalyzer()
+
+    # Extract detailed events from recent files
+    print("Extracting detailed sleep events...")
+    events_data, pressure_data = event_analyzer.extract_detailed_events(recent_files_only=True)
+
+    if events_data:
+        # Create comprehensive event charts
+        print("Creating detailed event visualizations...")
+        event_analyzer.create_detailed_event_charts(events_data, pressure_data)
+
+        # Generate detailed report
+        print("Generating detailed event report...")
+        detailed_report = event_analyzer.generate_detailed_report(events_data, pressure_data)
+
+        # Print summary
+        total_events = sum(len(night['events']) for night in events_data.values())
+        total_nights = len(events_data)
+
+        print(f"\n📊 Event Analysis Results:")
+        print(f"• Nights analyzed: {total_nights}")
+        print(f"• Total events detected: {total_events}")
+        print(f"• Average events per night: {total_events/total_nights:.1f}")
+
+        # Show sample events from first night
+        first_night = list(events_data.values())[0]
+        if first_night['events']:
+            print(f"\n🔍 Sample events from Night 1:")
+            for i, event in enumerate(first_night['events'][:5], 1):
+                print(f"  {i}. {event['timestamp']} - {event['type']} ({event['severity']})")
+                if 'pressure_increase' in event:
+                    print(f"     Pressure increase: {event['pressure_increase']:.1f} cmH₂O")
+
+        print(f"\n📁 Files generated:")
+        print(f"• detailed_sleep_events.png")
+        print(f"• detailed_sleep_events_report.txt")
+        print(f"• detailed_sleep_events_data.json")
+
+    else:
+        print("❌ No event data could be extracted")
+
+def example_combined_analysis():
+    """Example combining both analyzers for complete assessment"""
+    print("\n=== COMBINED COMPREHENSIVE ANALYSIS ===")
+
+    # Run basic sleep study analysis
+    print("1. Running comprehensive sleep study analysis...")
+    sleep_analyzer = BMCSleepAnalyzer()
+    sleep_results = sleep_analyzer.analyze_comprehensive_data(months=3)
+
+    # Run detailed event analysis
+    print("2. Running detailed event extraction...")
+    event_analyzer = DetailedEventAnalyzer()
+    events_data, pressure_data = event_analyzer.extract_detailed_events()
+
+    if sleep_results and events_data:
+        # Compare findings
+        pressure_stats = sleep_results.get('pressure_analysis', {}).get('statistics', {})
+        total_events = sum(len(night['events']) for night in events_data.values())
+
+        print(f"\n📊 COMBINED INSIGHTS:")
+        print(f"• Mean pressure: {pressure_stats.get('mean', 0):.1f} cmH₂O")
+        print(f"• Pressure stability: {sleep_results.get('pressure_analysis', {}).get('therapy_assessment', {}).get('pressure_stability', 'Unknown')}")
+        print(f"• Events detected: {total_events}")
+        print(f"• Therapy effectiveness: {sleep_results.get('clinical_assessment', {}).get('therapy_effectiveness', 'Unknown')}")
+
+        print(f"\n🔬 CLINICAL CORRELATION:")
+        if total_events > 150:
+            print("• High event activity detected - correlates with pressure variability")
+        elif total_events > 50:
+            print("• Moderate event activity - CPAP responding appropriately")
+        else:
+            print("• Low event activity - excellent therapy control")
+
 if __name__ == "__main__":
     # Run examples (uncomment the ones you want to try)
 
@@ -102,3 +181,5 @@ if __name__ == "__main__":
     # example_complete_dataset_analysis()
     # example_clinical_insights()
     # example_custom_timeframe()
+    # example_detailed_event_analysis()  # NEW!
+    # example_combined_analysis()  # NEW!
