@@ -8,9 +8,9 @@
 
 # Output files (but keep requirements.txt)
 *.png
-bmc_cpap_report.txt
-bmc_cpap_analysis.json
-*.log
+*.txt
+*.json
+!requirements.txt
 
 # Python
 __pycache__/
